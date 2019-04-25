@@ -1,0 +1,74 @@
+# 配置服务器
+server:
+  port: 8080
+  servlet:
+    context-path: /dolls
+
+# 雪花ID生成器-服务器ID
+worker:
+  id: 1
+
+# 雪花ID生成器-数据中心ID
+data:
+  center:
+    id: 1
+
+# 配置启动环境， 如打成 jar 包 ， 使用命令启动 java -jar webapp.jar --spring.profiles.active=prd
+spring:
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force-request: true
+      force-response: true
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.16.100.203:3306/dolls?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: test.com
+    driverClassName: com.mysql.cj.jdbc.Driver
+    # dataSource Pool configuration
+    initialSize: 5
+    minIdle: 5
+    maxActive: 50
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements : true
+    filters:
+      commons-log.connection-logger-name: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 40
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  redis:
+      database: 8
+      host: 172.16.100.150
+      password:
+      port: 6379
+      jedis:
+        pool:
+          #最大连接数
+          max-active: 8
+          #最大阻塞等待时间(负数表示没限制)
+          max-wait: 6000
+          #最大空闲
+          max-idle: 8
+          #最小空闲
+          min-idle: 0
+        #连接超时时间
+        timeout: 10000
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update #该属性有不同选项
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
